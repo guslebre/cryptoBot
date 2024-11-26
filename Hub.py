@@ -76,13 +76,3 @@ def post_crypto_updates():
     except Exception as e:
         print(f"Error posting updates: {e}")
 
-
-# Schedule the task to run daily at 12:00 PM EST
-# schedule.every().day.at("12:00").do(post_crypto_updates)
-
-print("Scheduler is running. Waiting for tasks...")
-
-# Run pending tasks
-# schedule.run_pending()
-# time.sleep(1)
-post_crypto_updates()
