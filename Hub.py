@@ -28,7 +28,11 @@ api = tweepy.API(auth, wait_on_rate_limit=True)
 
 
 def tweet(text):
-    client.create_tweet(text=text)
+    try:
+        client.create_tweet(text=text)
+        print("tweet succesfully psoted")
+    except Exception as e:
+        print(e)
 
 
 def post_crypto_updates():
@@ -50,9 +54,7 @@ def post_crypto_updates():
             return
 
         # Print message
-        print(btc_message)
-     
-        print(btc_message)
+        tweet(btc_message)
         time.sleep(120)
         
 
@@ -62,7 +64,7 @@ def post_crypto_updates():
                 f"Bitcoin price has reached its LOWEST price in the last 3 months.\n"
                 f"Bitcoin price is now at ${btc_now_price:.2f}. ({change:+.2f}% {btc_emoji})"
             )
-            print(btc_record_message)
+            tweet(btc_record_message)
             print(btc_record_message)
             time.sleep(120)
         elif btc_now_price > btc_highest_price:
@@ -70,6 +72,7 @@ def post_crypto_updates():
                 f"Bitcoin price has reached its HIGHEST price in the last 3 months.\n"
                 f"Bitcoin price is now at ${btc_now_price:.2f}. ({change:+.2f}% {btc_emoji})"
             )
+            tweet(btc_record_message)
             print(btc_record_message)
             time.sleep(120)
 
