@@ -2,6 +2,8 @@
 import schedule
 import time
 from datetime import datetime
+
+import tweepy
 from tweepy import Client
 
 # Import message functions from the respective files
@@ -15,7 +17,18 @@ ACCESS_TOKEN_SECRET = 'B8mzR80s12MUOo2u31cE1gWzQ3JgPpZ3kyhTDqpMXXz6h'
 bearer_token = r"AAAAAAAAAAAAAAAAAAAAAJ%2F1oQEAAAAAVuxvIeRAuIf729V%2BXJVhO79lp0M%3Ddrf9vOuJplZq4M6PFNLbKtWMVusraIx9u8zqMuoLeJDHDtLp8X"
 
 # Initialize Twitter client
-#client = Client(bearer_token, API_KEY, API_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
+client = tweepy.Client(bearer_token, API_KEY, API_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
+
+# Step 2: Set up Tweepy authentication
+auth = tweepy.OAuthHandler(API_KEY, API_SECRET)
+auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
+
+# Step 3: Create API object
+api = tweepy.API(auth, wait_on_rate_limit=True)
+
+
+def tweet(text):
+    client.create_tweet(text=text)
 
 
 def post_crypto_updates():
@@ -38,6 +51,10 @@ def post_crypto_updates():
 
         # Print message
         print(btc_message)
+     
+        tweet(btc_message)
+        time.sleep(120)
+        
 
         # Check if the current price is a new lowest or highest
         if btc_now_price < btc_lowest_price:
@@ -46,12 +63,15 @@ def post_crypto_updates():
                 f"Bitcoin price is now at ${btc_now_price:.2f}. ({change:+.2f}% {btc_emoji})"
             )
             print(btc_record_message)
+            tweet(btc_record_message)
+            time.sleep(120)
         elif btc_now_price > btc_highest_price:
             btc_record_message = (
                 f"Bitcoin price has reached its HIGHEST price in the last 3 months.\n"
                 f"Bitcoin price is now at ${btc_now_price:.2f}. ({change:+.2f}% {btc_emoji})"
             )
-            print(btc_record_message)
+            tweet(btc_record_message)
+            time.sleep(120)
 
     except Exception as e:
         print(f"Error posting updates: {e}")
